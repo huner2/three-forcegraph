@@ -535,10 +535,11 @@ export default Kapsule({
         const particleGeometry = new three.SphereBufferGeometry(photonR, numSegments, numSegments);
 
         const linkColorAccessor = accessorFn(state.linkColor);
+        const linkOpacityAccessor = accessorFn(state.linkOpacity);
         const particleColorAccessor = accessorFn(state.linkDirectionalParticleColor);
         const photonColor = particleColorAccessor(link) || linkColorAccessor(link) || '#f0f0f0';
         const materialColor = new three.Color(colorStr2Hex(photonColor));
-        const opacity = accessorFn(state.linkOpacity) * 3;
+        const opacity = linkOpacityAccessor(link) * 3;
         const particleMaterial = new three.MeshLambertMaterial({
           color: materialColor,
           transparent: true,
@@ -840,8 +841,9 @@ export default Kapsule({
                 obj.material = customMaterial;
               } else {
                 const color = colorAccessor(link);
+                const linkOpacityAccessor = accessorFn(state.lineOpacity);
                 const materialColor = new three.Color(colorStr2Hex(color || '#f0f0f0'));
-                const opacity = accessorFn(state.linkOpacity) * colorAlpha(color);
+                const opacity = linkOpacityAccessor(link) * colorAlpha(color);
 
                 const materialType = useCylinder ? 'MeshLambertMaterial' : 'LineBasicMaterial';
                 if (obj.material.type !== materialType
@@ -886,6 +888,7 @@ export default Kapsule({
             },
             updateObj: (obj, link) => {
               const arrowLength = arrowLengthAccessor(link);
+              const linkOpacityAccessor = accessorFn(state.linkOpacity);
               const numSegments = state.linkDirectionalArrowResolution;
 
               if (obj.geometry.type !== 'ConeBufferGeometry'
@@ -902,7 +905,7 @@ export default Kapsule({
               }
 
               obj.material.color = new three.Color(arrowColorAccessor(link) || colorAccessor(link) || '#f0f0f0');
-              obj.material.opacity = accessorFn(state.linkOpacity) * 3;
+              obj.material.opacity = linkOpacityAccessor(link) * 3;
             }
           }
         );
@@ -953,7 +956,7 @@ export default Kapsule({
 
               const photonColor = particleColorAccessor(link) || colorAccessor(link) || '#f0f0f0';
               const materialColor = new three.Color(colorStr2Hex(photonColor));
-              const opacity = accessorFn(state.linkOpacity) * 3;
+              const opacity = accessorFn(link.linkOpacity) * 3;
 
               let particleMaterial;
               if (curPhoton

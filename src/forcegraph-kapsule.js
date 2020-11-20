@@ -841,7 +841,7 @@ export default Kapsule({
                 obj.material = customMaterial;
               } else {
                 const color = colorAccessor(link);
-                const linkOpacityAccessor = accessorFn(state.lineOpacity);
+                const linkOpacityAccessor = accessorFn(state.linkOpacity);
                 const materialColor = new three.Color(colorStr2Hex(color || '#f0f0f0'));
                 const opacity = linkOpacityAccessor(link) * colorAlpha(color);
 

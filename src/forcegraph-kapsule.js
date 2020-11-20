@@ -141,7 +141,7 @@ export default Kapsule({
     linkVisibility: { default: true },
     linkColor: { default: 'color' },
     linkAutoColorBy: {},
-    linkOpacity: { default: 0.2 },
+    linkOpacity: { default: 'opacity' },
     linkWidth: {}, // Rounded to nearest decimal. For falsy values use dimensionless line with 1px regardless of distance.
     linkResolution: { default: 6 }, // how many radial segments in each line tube's geometry
     linkCurvature: { default: 0, triggerUpdate: false }, // line curvature radius (0: straight, 1: semi-circle)
@@ -538,7 +538,7 @@ export default Kapsule({
         const particleColorAccessor = accessorFn(state.linkDirectionalParticleColor);
         const photonColor = particleColorAccessor(link) || linkColorAccessor(link) || '#f0f0f0';
         const materialColor = new three.Color(colorStr2Hex(photonColor));
-        const opacity = state.linkOpacity * 3;
+        const opacity = accessorFn(state.linkOpacity) * 3;
         const particleMaterial = new three.MeshLambertMaterial({
           color: materialColor,
           transparent: true,
@@ -841,7 +841,7 @@ export default Kapsule({
               } else {
                 const color = colorAccessor(link);
                 const materialColor = new three.Color(colorStr2Hex(color || '#f0f0f0'));
-                const opacity = state.linkOpacity * colorAlpha(color);
+                const opacity = accessorFn(state.linkOpacity) * colorAlpha(color);
 
                 const materialType = useCylinder ? 'MeshLambertMaterial' : 'LineBasicMaterial';
                 if (obj.material.type !== materialType
@@ -902,7 +902,7 @@ export default Kapsule({
               }
 
               obj.material.color = new three.Color(arrowColorAccessor(link) || colorAccessor(link) || '#f0f0f0');
-              obj.material.opacity = state.linkOpacity * 3;
+              obj.material.opacity = accessorFn(state.linkOpacity) * 3;
             }
           }
         );
@@ -953,7 +953,7 @@ export default Kapsule({
 
               const photonColor = particleColorAccessor(link) || colorAccessor(link) || '#f0f0f0';
               const materialColor = new three.Color(colorStr2Hex(photonColor));
-              const opacity = state.linkOpacity * 3;
+              const opacity = accessorFn(state.linkOpacity) * 3;
 
               let particleMaterial;
               if (curPhoton
